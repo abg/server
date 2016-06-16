@@ -76,6 +76,7 @@ public:
 
 public:
   virtual longlong val_int();
+  bool need_parentesis_in_default() { return false; }
 
 protected:
   virtual bool calc_value(const String *arg) = 0;
