@@ -571,7 +571,6 @@ class Item_num_op :public Item_func_numhybrid
   {
     print_op(str, query_type);
   }
-
   void fix_length_and_dec();
 };
 
@@ -1400,7 +1399,7 @@ public:
     return res;
   }
   void fix_num_length_and_dec();
-  void update_used_tables() 
+  void update_used_tables()
   {
     /*
       TODO: Make a member in UDF_INIT and return if a UDF is deterministic or
@@ -2010,7 +2009,6 @@ private:
 
     return false;
   }
-
 };
 
 
