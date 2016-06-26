@@ -201,8 +201,8 @@ public:
                 Item_transformer transformer, uchar *arg_t);
   void traverse_cond(Cond_traverser traverser,
                      void * arg, traverse_order order);
-  bool eval_not_null_tables(uchar *opt_arg);
- // bool is_expensive_processor(uchar *arg);
+  bool eval_not_null_tables(void *opt_arg);
+ // bool is_expensive_processor(void *arg);
  // virtual bool is_expensive() { return 0; }
   inline void raise_numeric_overflow(const char *type_name)
   {
@@ -325,12 +325,12 @@ public:
     representation of a TIMESTAMP argument verbatim, and thus does not depend on
     the timezone.
    */
-  virtual bool check_valid_arguments_processor(uchar *bool_arg)
+  virtual bool check_valid_arguments_processor(void *bool_arg)
   {
     return has_timestamp_args();
   }
 
-  virtual bool find_function_processor (uchar *arg)
+  virtual bool find_function_processor (void *arg)
   {
     return functype() == *(Functype *) arg;
   }
@@ -612,7 +612,7 @@ public:
   void fix_length_and_dec();
   bool fix_fields(THD *thd, Item **ref);
   longlong val_int() { DBUG_ASSERT(fixed == 1); return value; }
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_NON_DETERMINISTIC);
   }
@@ -701,8 +701,8 @@ class Item_func_additive_op :public Item_num_op
 public:
   Item_func_additive_op(THD *thd, Item *a, Item *b): Item_num_op(thd, a, b) {}
   void result_precision();
-  bool check_partition_func_processor(uchar *int_arg) {return FALSE;}
-  bool check_vcol_func_processor(uchar *arg) { return FALSE;}
+  bool check_partition_func_processor(void *int_arg) {return FALSE;}
+  bool check_vcol_func_processor(void *arg) { return FALSE;}
 };
 
 
@@ -740,8 +740,8 @@ public:
   double real_op();
   my_decimal *decimal_op(my_decimal *);
   void result_precision();
-  bool check_partition_func_processor(uchar *int_arg) {return FALSE;}
-  bool check_vcol_func_processor(uchar *arg) { return FALSE;}
+  bool check_partition_func_processor(void *int_arg) {return FALSE;}
+  bool check_vcol_func_processor(void *arg) { return FALSE;}
 };
 
 
@@ -773,8 +773,8 @@ public:
     print_op(str, query_type);
   }
 
-  bool check_partition_func_processor(uchar *int_arg) {return FALSE;}
-  bool check_vcol_func_processor(uchar *arg) { return FALSE;}
+  bool check_partition_func_processor(void *int_arg) {return FALSE;}
+  bool check_vcol_func_processor(void *arg) { return FALSE;}
   bool need_parentesis_in_default() { return true; }
 };
 
@@ -789,8 +789,8 @@ public:
   const char *func_name() const { return "%"; }
   void result_precision();
   void fix_length_and_dec();
-  bool check_partition_func_processor(uchar *int_arg) {return FALSE;}
-  bool check_vcol_func_processor(uchar *arg) { return FALSE;}
+  bool check_partition_func_processor(void *int_arg) {return FALSE;}
+  bool check_vcol_func_processor(void *arg) { return FALSE;}
 };
 
 
@@ -805,8 +805,8 @@ public:
   enum Functype functype() const   { return NEG_FUNC; }
   void fix_length_and_dec();
   uint decimal_precision() const { return args[0]->decimal_precision(); }
-  bool check_partition_func_processor(uchar *int_arg) {return FALSE;}
-  bool check_vcol_func_processor(uchar *arg) { return FALSE;}
+  bool check_partition_func_processor(void *int_arg) {return FALSE;}
+  bool check_vcol_func_processor(void *arg) { return FALSE;}
   bool need_parentesis_in_default() { return true; }
 };
 
@@ -820,8 +820,8 @@ public:
   my_decimal *decimal_op(my_decimal *);
   const char *func_name() const { return "abs"; }
   void fix_length_and_dec();
-  bool check_partition_func_processor(uchar *int_arg) {return FALSE;}
-  bool check_vcol_func_processor(uchar *arg) { return FALSE;}
+  bool check_partition_func_processor(void *int_arg) {return FALSE;}
+  bool check_vcol_func_processor(void *arg) { return FALSE;}
 };
 
 // A class to handle logarithmic and trigonometric functions
@@ -983,8 +983,8 @@ public:
   longlong int_op();
   double real_op();
   my_decimal *decimal_op(my_decimal *);
-  bool check_partition_func_processor(uchar *int_arg) {return FALSE;}
-  bool check_vcol_func_processor(uchar *arg) { return FALSE;}
+  bool check_partition_func_processor(void *int_arg) {return FALSE;}
+  bool check_vcol_func_processor(void *arg) { return FALSE;}
 };
 
 
@@ -996,8 +996,8 @@ public:
   longlong int_op();
   double real_op();
   my_decimal *decimal_op(my_decimal *);
-  bool check_partition_func_processor(uchar *int_arg) {return FALSE;}
-  bool check_vcol_func_processor(uchar *arg) { return FALSE;}
+  bool check_partition_func_processor(void *int_arg) {return FALSE;}
+  bool check_vcol_func_processor(void *arg) { return FALSE;}
 };
 
 /* This handles round and truncate */
@@ -1030,7 +1030,7 @@ public:
   void update_used_tables();
   bool fix_fields(THD *thd, Item **ref);
   void cleanup() { first_eval= TRUE; Item_real_func::cleanup(); }
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_NON_DETERMINISTIC);
   }
@@ -1326,7 +1326,7 @@ public:
     unsigned_flag=1;
   }
   bool fix_fields(THD *thd, Item **ref);
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -1343,7 +1343,7 @@ public:
   const char *func_name() const { return "benchmark"; }
   void fix_length_and_dec() { max_length=1; maybe_null=0; }
   virtual void print(String *str, enum_query_type query_type);
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -1365,7 +1365,7 @@ public:
   }
   bool is_expensive() { return 1; }
   longlong val_int();
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -1388,7 +1388,7 @@ class Item_udf_func :public Item_func
   }
 protected:
   udf_handler udf;
-  bool is_expensive_processor(uchar *arg) { return TRUE; }
+  bool is_expensive_processor(void *arg) { return TRUE; }
 
 public:
   Item_udf_func(THD *thd, udf_func *udf_arg):
@@ -1460,7 +1460,7 @@ public:
   table_map not_null_tables() const { return 0; }
   bool is_expensive() { return 1; }
   virtual void print(String *str, enum_query_type query_type);
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_UNKNOWN);
   }
@@ -1635,7 +1635,7 @@ class Item_func_get_lock :public Item_int_func
   }
   bool const_item() const { return 0; }
   bool is_expensive() { return 1; }
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -1655,7 +1655,7 @@ public:
   }
   bool const_item() const { return 0; }
   bool is_expensive() { return 1; }
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -1675,7 +1675,7 @@ public:
   longlong val_int();
   const char *func_name() const { return "master_pos_wait"; }
   void fix_length_and_dec() { max_length=21; maybe_null=1;}
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -1691,7 +1691,7 @@ public:
   longlong val_int();
   const char *func_name() const { return "master_gtid_wait"; }
   void fix_length_and_dec() { max_length=10+1+10+1+20+1; maybe_null=0;}
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -1719,7 +1719,7 @@ public:
   Item_func_user_var(THD *thd, Item_func_user_var *item)
     :Item_hybrid_func(thd, item),
     m_var_entry(item->m_var_entry), name(item->name) { }
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function("user_var", arg, VCOL_IMPOSSIBLE);
   }
@@ -1807,8 +1807,8 @@ public:
   void save_org_in_field(Field *field,
                          fast_field_copier data __attribute__ ((__unused__)))
     { (void)save_in_field(field, 1, 0); }
-  bool register_field_in_read_map(uchar *arg);
-  bool register_field_in_bitmap(uchar *arg);
+  bool register_field_in_read_map(void *arg);
+  bool register_field_in_bitmap(void *arg);
   bool set_entry(THD *thd, bool create_if_not_exists);
   void cleanup();
 };
@@ -1929,7 +1929,7 @@ public:
   bool eq(const Item *item, bool binary_cmp) const;
 
   void cleanup();
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_NON_DETERMINISTIC);
   }
@@ -1965,7 +1965,7 @@ public:
     table= 0;           // required by Item_func_match::eq()
     DBUG_VOID_RETURN;
   }
-  bool is_expensive_processor(uchar *arg) { return TRUE; }
+  bool is_expensive_processor(void *arg) { return TRUE; }
   enum Functype functype() const { return FT_FUNC; }
   const char *func_name() const { return "match"; }
   table_map not_null_tables() const { return 0; }
@@ -1978,7 +1978,7 @@ public:
 
   bool fix_index();
   void init_search(THD *thd, bool no_order);
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -2035,7 +2035,7 @@ public:
   longlong val_int();
   const char *func_name() const { return "is_free_lock"; }
   void fix_length_and_dec() { decimals=0; max_length=1; maybe_null=1;}
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -2049,7 +2049,7 @@ public:
   longlong val_int();
   const char *func_name() const { return "is_used_lock"; }
   void fix_length_and_dec() { decimals=0; max_length=10; maybe_null=1;}
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -2099,7 +2099,7 @@ public:
   longlong val_int();
   const char *func_name() const { return "row_count"; }
   void fix_length_and_dec() { decimals= 0; maybe_null=0; }
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -2134,7 +2134,7 @@ private:
   bool init_result_field(THD *thd);
 
 protected:
-  bool is_expensive_processor(uchar *arg)
+  bool is_expensive_processor(void *arg)
   { return is_expensive(); }
   
 public:
@@ -2210,7 +2210,7 @@ public:
     execute();
   }
 
-  virtual bool change_context_processor(uchar *cntx)
+  virtual bool change_context_processor(void *cntx)
     { context= (Name_resolution_context *)cntx; return FALSE; }
 
   bool sp_check_access(THD * thd);
@@ -2225,11 +2225,11 @@ public:
     return sp_result_field;
   }
 
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
-  bool limit_index_condition_pushdown_processor(uchar *opt_arg)
+  bool limit_index_condition_pushdown_processor(void *opt_arg)
   {
     return TRUE;
   }
@@ -2243,7 +2243,7 @@ public:
   longlong val_int();
   const char *func_name() const { return "found_rows"; }
   void fix_length_and_dec() { decimals= 0; maybe_null=0; }
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
   }
@@ -2261,7 +2261,7 @@ public:
   void fix_length_and_dec()
   { max_length= 21; unsigned_flag=1; }
   table_map used_tables() const { return RAND_TABLE_BIT; }
-  bool check_vcol_func_processor(uchar *arg)
+  bool check_vcol_func_processor(void *arg)
   {
     return mark_unsupported_function(func_name(), arg, VCOL_NON_DETERMINISTIC);
   }
