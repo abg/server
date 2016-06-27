@@ -4630,6 +4630,11 @@ longlong Item_func_sleep::val_int()
 }
 
 
+bool Item_func_user_var::check_vcol_func_processor(void *arg)
+{
+  return mark_unsupported_function("@", name.str, arg, VCOL_IMPOSSIBLE);
+}
+
 #define extra_size sizeof(double)
 
 user_var_entry *get_variable(HASH *hash, LEX_STRING &name,
@@ -6893,6 +6898,10 @@ void Item_func_sp::update_used_tables()
   }
 }
 
+bool Item_func_sp::check_vcol_func_processor(void *arg)
+{
+  return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
+}
 
 /*
   uuid_short handling.

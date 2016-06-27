@@ -614,7 +614,7 @@ public:
   longlong val_int() { DBUG_ASSERT(fixed == 1); return value; }
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_NON_DETERMINISTIC);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_NON_DETERMINISTIC);
   }
 };
 
@@ -1032,7 +1032,7 @@ public:
   void cleanup() { first_eval= TRUE; Item_real_func::cleanup(); }
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_NON_DETERMINISTIC);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_NON_DETERMINISTIC);
   }
 private:
   void seed_random (Item * val);  
@@ -1328,7 +1328,7 @@ public:
   bool fix_fields(THD *thd, Item **ref);
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -1345,7 +1345,7 @@ public:
   virtual void print(String *str, enum_query_type query_type);
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -1367,7 +1367,7 @@ public:
   longlong val_int();
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -1462,7 +1462,7 @@ public:
   virtual void print(String *str, enum_query_type query_type);
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_UNKNOWN);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_UNKNOWN);
   }
 };
 
@@ -1637,7 +1637,7 @@ class Item_func_get_lock :public Item_int_func
   bool is_expensive() { return 1; }
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -1657,7 +1657,7 @@ public:
   bool is_expensive() { return 1; }
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -1677,7 +1677,7 @@ public:
   void fix_length_and_dec() { max_length=21; maybe_null=1;}
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -1693,7 +1693,7 @@ public:
   void fix_length_and_dec() { max_length=10+1+10+1+20+1; maybe_null=0;}
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -1719,10 +1719,7 @@ public:
   Item_func_user_var(THD *thd, Item_func_user_var *item)
     :Item_hybrid_func(thd, item),
     m_var_entry(item->m_var_entry), name(item->name) { }
-  bool check_vcol_func_processor(void *arg)
-  {
-    return mark_unsupported_function("user_var", arg, VCOL_IMPOSSIBLE);
-  }
+  bool check_vcol_func_processor(void *arg);
 };
 
 
@@ -1931,7 +1928,7 @@ public:
   void cleanup();
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_NON_DETERMINISTIC);
+    return mark_unsupported_function(name, arg, VCOL_NON_DETERMINISTIC);
   }
 };
 
@@ -1980,7 +1977,7 @@ public:
   void init_search(THD *thd, bool no_order);
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function("match ... against()", arg, VCOL_IMPOSSIBLE);
   }
 private:
   /**
@@ -2037,7 +2034,7 @@ public:
   void fix_length_and_dec() { decimals=0; max_length=1; maybe_null=1;}
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -2051,7 +2048,7 @@ public:
   void fix_length_and_dec() { decimals=0; max_length=10; maybe_null=1;}
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -2101,7 +2098,7 @@ public:
   void fix_length_and_dec() { decimals= 0; maybe_null=0; }
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -2225,10 +2222,7 @@ public:
     return sp_result_field;
   }
 
-  bool check_vcol_func_processor(void *arg)
-  {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
-  }
+  bool check_vcol_func_processor(void *arg);
   bool limit_index_condition_pushdown_processor(void *opt_arg)
   {
     return TRUE;
@@ -2245,7 +2239,7 @@ public:
   void fix_length_and_dec() { decimals= 0; maybe_null=0; }
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_IMPOSSIBLE);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_IMPOSSIBLE);
   }
 };
 
@@ -2263,7 +2257,7 @@ public:
   table_map used_tables() const { return RAND_TABLE_BIT; }
   bool check_vcol_func_processor(void *arg)
   {
-    return mark_unsupported_function(func_name(), arg, VCOL_NON_DETERMINISTIC);
+    return mark_unsupported_function(func_name(), "()", arg, VCOL_NON_DETERMINISTIC);
   }
 };
 
