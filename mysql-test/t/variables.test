@@ -1532,3 +1532,5 @@ show global status like 'foobar';
 select * from information_schema.session_variables where variable_name='sql_mode';
 
 --echo End of 5.5 tests
+
+explain extended select 1+@@version;

@@ -10797,7 +10797,7 @@ window_name:
         ;
 
 variable:
-          '@'
+          remember_name '@'
           {
             if (! Lex->parsing_options.allows_variable)
             {
@@ -10805,9 +10805,11 @@ variable:
               MYSQL_YYABORT;
             }
           }
-          variable_aux
+          variable_aux remember_end
           {
-            $$= $3;
+            $$= $4;
+            if (! $$->name)
+              $4->set_name(thd, $1, (uint) ($5 - $1), thd->charset());
           }
         ;
 
