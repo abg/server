@@ -452,9 +452,6 @@ CREATE TABLE t1 (a INT, b INT, c INT DEFAULT a DIV b);
 ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'DIV b)' at line 1
 CREATE TABLE t1 (a INT, b INT DEFAULT -a);
 ERROR 42000: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'a)' at line 1
-drop table if exists t1;
-Warnings:
-Note	1051	Unknown table 'test.t1'
 #
 # Invalid DEFAULT expressions
 #
